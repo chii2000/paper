@@ -15,6 +15,7 @@ function myFunction() {
   scanAndSendFiles(files);
 }
 
+
 // get all files in the folder specified with id
 function getFiles() {
   const targetFolder = DriveApp.getFolderById(FOLDER_ID);
@@ -30,19 +31,19 @@ function scanAndSendFiles(files, nMax=500) {
 
       break;
     }
-//
 
+    
     let file = files.next();
+
+    const filename = file.getName();
     const status = file.getDescription();
-
+    Logger.log(`status:${status}, ${filename}`);
     // skip for already sent files
-    if (status == STATUS.DONE | status == STATUS.ERROR) {
-
+    if (status == STATUS.DONE) {
       continue;
     }
 
-    const filename = file.getName();
-
+    
     const url = file.getUrl();
     const thumbnailURL = getThumbnailUrl(file.getId());
 
@@ -97,7 +98,6 @@ function send2Notion(result) {
     payload: JSON.stringify(obj),
   };
   UrlFetchApp.fetch(apiUrl, options);
-
 }
 
 
@@ -155,5 +155,6 @@ function generateObj(result) {
     }
     // EDIT HERE //
   }
+
   return pageObj;
 }
